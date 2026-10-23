@@ -276,6 +276,10 @@ const App = () => {
         <div className="blob b1" /><div className="blob b3" />
         <div className="wrap">
           <div style={{ maxWidth: 720 }} data-reveal>
+            <div className="host">
+              <img src={logo} alt="" width={56} height={56} loading="lazy" />
+              <span>Organiza<b>Homeschool Cristiano Chile</b></span>
+            </div>
             <span className="eyebrow" style={{ color: "var(--yellow)" }}>Detalles del evento</span>
             <h2 className="section-title">Masterclass <span className="hl">Tu negocio desde casa</span></h2>
             <p className="lead">Un espacio para descubrir cómo dar tus primeros pasos en el emprendimiento digital, organizado por Homeschool Cristiano Chile.</p>
@@ -381,7 +385,7 @@ const App = () => {
       </section>
 
       <footer>
-        <img className="footer-logo" src={logoFull} alt="Homeschool Cristiano Chile" width={120} height={123} loading="lazy" />
+        <img className="footer-logo" src={logoFull} alt="Homeschool Cristiano Chile" width={140} height={140} loading="lazy" />
         © 2026 Homeschool Cristiano Chile · Masterclass «Tu negocio desde casa»
       </footer>
 
