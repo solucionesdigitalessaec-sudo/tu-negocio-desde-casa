@@ -274,6 +274,13 @@
 .mc .skeleton i { display: block; height: 18px; border-radius: 10px; background: linear-gradient(90deg, #f1ecfa 25%, #fbf8ff 50%, #f1ecfa 75%); background-size: 200% 100%; animation: mc-shimmer 1.4s infinite; }
 .mc .skeleton i.tall { height: 52px; }
 @keyframes mc-shimmer { to { background-position: -200% 0; } }
+.mc .pay-panel { display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; padding: 48px 24px 40px; border-radius: 20px; background: #fff; animation: mc-pop 0.5s cubic-bezier(.2,.8,.2,1); }
+.mc .pay-panel h3 { font-size: clamp(1.6rem, 3.4vw, 2.2rem); }
+.mc .pay-panel .lead { max-width: 46ch; }
+.mc .pay-check { width: 72px; height: 72px; border-radius: 50%; display: grid; place-items: center; background: var(--pink); color: #fff; box-shadow: var(--shadow-pink); }
+.mc .pay-price { font-weight: 800; color: var(--ink-soft); }
+.mc .pay-again { margin-top: 6px; border: 0; background: none; cursor: pointer; font: inherit; font-weight: 800; color: var(--purple); border-bottom: 2px solid currentColor; padding: 0 0 2px; }
+@keyframes mc-pop { 0% { transform: scale(0.92); opacity: 0; } 100% { transform: none; opacity: 1; } }
 .mc .form-alt { text-align: center; margin-top: 22px; color: var(--ink-soft); font-weight: 700; }
 .mc .form-alt a { color: var(--purple); border-bottom: 2px solid currentColor; }
 

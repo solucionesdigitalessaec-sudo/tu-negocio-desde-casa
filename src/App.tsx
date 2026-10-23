@@ -5,6 +5,7 @@ import {
   CalendarDays,
   Gift,
   CalendarPlus,
+  Check,
   Clock,
   Instagram,
   Video,
@@ -19,6 +20,9 @@ import slide9 from "./assets/slide-9.webp";
 
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSegrEjMlKJ9ynZe41kQURsvDF2y_mQGBjJ0M6ulg9m-6JAb9Q/viewform";
 const FORM_EMBED_URL = `${FORM_URL}?embedded=true`;
+// Mercado Pago payment link. Shown in a panel (opened in a new tab) right after the
+// embedded form is submitted, because Mercado Pago refuses to load inside an iframe.
+const PAYMENT_URL = "";
 // 22 nov 2026, 17:00 Chile (UTC-3) = 20:00 UTC
 const EVENT_START = new Date("2026-11-22T20:00:00Z");
 const EVENT_END = new Date("2026-11-22T22:00:00Z");
@@ -150,6 +154,10 @@ const App = () => {
 
 
   const [formLoaded, setFormLoaded] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const [formKey, setFormKey] = useState(0);
+  const formLoads = useRef(0);
+  const formPanelRef = useRef<HTMLDivElement>(null);
 
   useReveal(rootRef);
 
@@ -346,20 +354,46 @@ const App = () => {
               <span className="dots"><i /><i /><i /></span>
               <a className="btn small ghost" href={FORM_URL} target="_blank" rel="noopener noreferrer">Abrir en pestaña nueva <ArrowRight size={14} /></a>
             </div>
-            <div className={`form-frame ${formLoaded ? "loaded" : ""}`}>
-              <div className="skeleton" aria-hidden="true">
-                <i style={{ width: "60%" }} className="tall" /><i style={{ width: "85%" }} /><i style={{ width: "40%" }} />
-                <i className="tall" /><i style={{ width: "50%" }} /><i className="tall" /><i style={{ width: "70%" }} /><i className="tall" />
+            {submitted ? (
+              <div className="pay-panel" ref={formPanelRef} role="status">
+                <span className="pay-check"><Check size={34} strokeWidth={3} /></span>
+                <h3>¡Recibimos tu inscripción!</h3>
+                <p className="lead">Último paso: realiza tu pago para confirmar tu lugar en «Tu negocio desde casa».</p>
+                <a className="btn pulse" href={PAYMENT_URL} target="_blank" rel="noopener noreferrer">Pagar con Mercado Pago <ArrowRight size={20} /></a>
+                <p className="pay-price">Valor: $10.000 CLP · 10 USD</p>
+                <button
+                  type="button"
+                  className="pay-again"
+                  onClick={() => { formLoads.current = 0; setFormLoaded(false); setSubmitted(false); setFormKey((k) => k + 1); }}
+                >
+                  Inscribir a otra persona
+                </button>
               </div>
-              <iframe
-                src={FORM_EMBED_URL}
-                title="Formulario de inscripción a la masterclass Tu negocio desde casa"
-                loading="lazy"
-                onLoad={() => setFormLoaded(true)}
-              >
-                Cargando…
-              </iframe>
-            </div>
+            ) : (
+              <div className={`form-frame ${formLoaded ? "loaded" : ""}`}>
+                <div className="skeleton" aria-hidden="true">
+                  <i style={{ width: "60%" }} className="tall" /><i style={{ width: "85%" }} /><i style={{ width: "40%" }} />
+                  <i className="tall" /><i style={{ width: "50%" }} /><i className="tall" /><i style={{ width: "70%" }} /><i className="tall" />
+                </div>
+                <iframe
+                  key={formKey}
+                  src={FORM_EMBED_URL}
+                  title="Formulario de inscripción a la masterclass Tu negocio desde casa"
+                  loading="lazy"
+                  onLoad={() => {
+                    // 1st load = the form; a 2nd load means Google navigated to the confirmation page
+                    formLoads.current += 1;
+                    setFormLoaded(true);
+                    if (formLoads.current >= 2 && PAYMENT_URL) {
+                      setSubmitted(true);
+                      requestAnimationFrame(() => formPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
+                    }
+                  }}
+                >
+                  Cargando…
+                </iframe>
+              </div>
+            )}
           </div>
           <p className="form-alt">¿No ves el formulario? <a href={FORM_URL} target="_blank" rel="noopener noreferrer">Haz clic aquí para abrirlo</a>.</p>
         </div>
