@@ -9,7 +9,6 @@ import {
   Instagram,
   Lightbulb,
   MessageCircle,
-  Plus,
   ShoppingCart,
   Sparkles,
   Users,
@@ -40,14 +39,6 @@ const STEPS = [
   { icon: ShoppingCart, title: "Usando las redes sociales estratégicamente para vender", text: "Sin necesidad de miles de seguidores ni de convertirte en influencer: con estrategia y propósito." },
 ];
 
-const FAQS = [
-  { q: "¿Cuándo es la masterclass?", a: "El domingo 22 de noviembre de 2026 a las 17:00 (Chile), 14:00 (México) y 15:00 (Colombia y Ecuador). Dura 120 minutos." },
-  { q: "¿Y si no puedo conectarme en vivo?", a: "No te preocupes: tendrás acceso a la grabación online del workshop durante una semana para verla a tu ritmo." },
-  { q: "¿Qué material voy a recibir?", a: "Un libro digital imprimible para trabajar durante la sesión, así aplicas lo aprendido mientras avanzamos juntas." },
-  { q: "¿Necesito tener seguidores o experiencia en redes?", a: "No. No necesitas miles de seguidores ni convertirte en influencer para comenzar. Necesitas descubrir qué puedes ofrecer y a quién puedes ayudar." },
-  { q: "¿Cuánto cuesta y cómo reservo?", a: "El valor es $10.000 CLP o 10 USD. Completa el formulario de inscripción en esta página y te escribiremos para reservar tu lugar." },
-];
-
 /* ---------------- hooks ---------------- */
 
 const useReveal = (root: React.RefObject<HTMLElement>) => {
@@ -57,7 +48,8 @@ const useReveal = (root: React.RefObject<HTMLElement>) => {
     const io = new IntersectionObserver(
       (entries) => entries.forEach((e) => {
         if (e.isIntersecting) {
-          e.target.classList.add("is-visible");
+          // attribute, not class: React rewrites className when a dynamic class changes
+          e.target.setAttribute("data-visible", "");
           io.unobserve(e.target);
         }
       }),
@@ -168,7 +160,6 @@ const App = () => {
 
 
   const [step, setStep] = useState(0);
-  const [faq, setFaq] = useState<number | null>(0);
   const [formLoaded, setFormLoaded] = useState(false);
 
   useReveal(rootRef);
@@ -225,7 +216,6 @@ const App = () => {
           <a href="#como">Qué aprenderás</a>
           <a href="#mentora">Mentora</a>
           <a href="#detalles">Detalles</a>
-          <a href="#preguntas">Preguntas</a>
         </div>
         <a href="#inscripcion" className="btn small">Reservar <ArrowRight size={16} /></a>
       </nav>
@@ -412,27 +402,6 @@ const App = () => {
             </div>
           </div>
           <p className="form-alt">¿No ves el formulario? <a href={FORM_URL} target="_blank" rel="noopener noreferrer">Haz clic aquí para abrirlo</a>.</p>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="faq" id="preguntas">
-        <div className="wrap">
-          <div style={{ textAlign: "center" }} data-reveal>
-            <span className="eyebrow">Preguntas frecuentes</span>
-            <h2 className="section-title">Resolvemos tus <span className="hl p">dudas</span></h2>
-          </div>
-          <div className="faq-list">
-            {FAQS.map((f, i) => (
-              <div key={i} className={`faq-item ${faq === i ? "on" : ""}`} data-reveal style={{ "--d": `${i * 0.06}s` } as React.CSSProperties}>
-                <button className="faq-q" onClick={() => setFaq(faq === i ? null : i)} aria-expanded={faq === i}>
-                  {f.q}
-                  <span className="pm"><Plus size={18} /></span>
-                </button>
-                <div className="faq-a"><div><p>{f.a}</p></div></div>
-              </div>
-            ))}
-          </div>
         </div>
       </section>
 
