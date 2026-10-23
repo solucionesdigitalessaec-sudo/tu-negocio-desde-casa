@@ -20,8 +20,9 @@ import slide9 from "./assets/slide-9.webp";
 
 const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSegrEjMlKJ9ynZe41kQURsvDF2y_mQGBjJ0M6ulg9m-6JAb9Q/viewform";
 const FORM_EMBED_URL = `${FORM_URL}?embedded=true`;
-// Mercado Pago payment link. Shown in a panel (opened in a new tab) right after the
-// embedded form is submitted, because Mercado Pago refuses to load inside an iframe.
+// Mercado Pago payment link. After the embedded form is submitted a thank-you panel replaces
+// Google's confirmation and, when this is set, its button opens the payment in a new tab
+// (Mercado Pago refuses to load inside an iframe).
 const PAYMENT_URL = "";
 // 22 nov 2026, 17:00 Chile (UTC-3) = 20:00 UTC
 const EVENT_START = new Date("2026-11-22T20:00:00Z");
@@ -357,10 +358,16 @@ const App = () => {
             {submitted ? (
               <div className="pay-panel" ref={formPanelRef} role="status">
                 <span className="pay-check"><Check size={34} strokeWidth={3} /></span>
-                <h3>¡Recibimos tu inscripción!</h3>
-                <p className="lead">Último paso: realiza tu pago para confirmar tu lugar en «Tu negocio desde casa».</p>
-                <a className="btn pulse" href={PAYMENT_URL} target="_blank" rel="noopener noreferrer">Pagar con Mercado Pago <ArrowRight size={20} /></a>
-                <p className="pay-price">Valor: $10.000 CLP · 10 USD</p>
+                <h3>¡Gracias por inscribirte!</h3>
+                {PAYMENT_URL ? (
+                  <>
+                    <p className="lead">Recibimos tu inscripción. Último paso: realiza tu pago para confirmar tu lugar en «Tu negocio desde casa».</p>
+                    <a className="btn pulse" href={PAYMENT_URL} target="_blank" rel="noopener noreferrer">Pagar con Mercado Pago <ArrowRight size={20} /></a>
+                    <p className="pay-price">Valor: $10.000 CLP · 10 USD</p>
+                  </>
+                ) : (
+                  <p className="lead">Recibimos tus datos para la masterclass «Tu negocio desde casa».</p>
+                )}
                 <button
                   type="button"
                   className="pay-again"
@@ -384,7 +391,7 @@ const App = () => {
                     // 1st load = the form; a 2nd load means Google navigated to the confirmation page
                     formLoads.current += 1;
                     setFormLoaded(true);
-                    if (formLoads.current >= 2 && PAYMENT_URL) {
+                    if (formLoads.current >= 2) {
                       setSubmitted(true);
                       requestAnimationFrame(() => formPanelRef.current?.scrollIntoView({ behavior: "smooth", block: "center" }));
                     }
