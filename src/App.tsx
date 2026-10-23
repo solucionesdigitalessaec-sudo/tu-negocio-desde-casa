@@ -3,14 +3,10 @@ import {
   ArrowRight,
   BookOpen,
   CalendarDays,
+  Gift,
   CalendarPlus,
   Clock,
-  Heart,
   Instagram,
-  Lightbulb,
-  MessageCircle,
-  ShoppingCart,
-  Sparkles,
   Video,
 } from "lucide-react";
 import "./masterclass.css";
@@ -18,7 +14,6 @@ import "./masterclass.css";
 import logo from "./assets/logo.webp";
 import logoFull from "./assets/logo-full.webp";
 import slide1 from "./assets/slide-1.webp";
-import slide6 from "./assets/slide-6.webp";
 import slide8 from "./assets/slide-8.webp";
 import slide9 from "./assets/slide-9.webp";
 
@@ -33,12 +28,6 @@ const CALENDAR_URL =
   "&text=" + encodeURIComponent("Masterclass: Tu negocio desde casa") +
   "&dates=20261122T200000Z/20261122T220000Z" +
   "&details=" + encodeURIComponent("Masterclass online de Homeschool Cristiano Chile junto a Maura Abarcia. Duración: 120 minutos.");
-
-const STEPS = [
-  { icon: Lightbulb, title: "Descubriendo una oportunidad de negocio", text: "Mirando con nuevos ojos lo que ya sabes hacer: tus conocimientos, tu experiencia como mamá y las habilidades que has desarrollado por años." },
-  { icon: MessageCircle, title: "Aprendiendo a comunicar tu valor", text: "Poniendo en palabras qué puedes ofrecer y a quién puedes ayudar, para que otras personas lo entiendan y lo valoren." },
-  { icon: ShoppingCart, title: "Usando las redes sociales estratégicamente para vender", text: "Sin necesidad de miles de seguidores ni de convertirte en influencer: con estrategia y propósito." },
-];
 
 /* ---------------- hooks ---------------- */
 
@@ -160,7 +149,6 @@ const App = () => {
   const [showSticky, setShowSticky] = useState(false);
 
 
-  const [step, setStep] = useState(0);
   const [formLoaded, setFormLoaded] = useState(false);
 
   useReveal(rootRef);
@@ -214,7 +202,6 @@ const App = () => {
           <span>Homeschool<br />Cristiano Chile</span>
         </a>
         <div className="nav-links">
-          <a href="#como">Qué aprenderás</a>
           <a href="#mentora">Mentora</a>
           <a href="#detalles">Detalles</a>
         </div>
@@ -248,47 +235,6 @@ const App = () => {
           <div className="hero-visual" data-reveal="zoom" style={{ "--d": "0.2s" } as React.CSSProperties}>
             <Tilt max={12}>
               <div className="photo"><img src={slide1} alt="Mamá pensando en su idea de negocio" width={900} height={1125} fetchPriority="high" /></div>
-              <div className="float-badge fb1 glass">
-                <span className="ico" style={{ background: "var(--pink)" }}><CalendarDays size={20} /></span>
-                <span>22 de noviembre<small>Domingo · 17:00 Chile</small></span>
-              </div>
-              <div className="float-badge fb2 glass">
-                <span className="ico" style={{ background: "var(--purple)" }}><Sparkles size={20} /></span>
-                <span>$10.000 CLP<small>o 10 USD</small></span>
-              </div>
-              <div className="float-badge fb3 glass">
-                <span className="ico" style={{ background: "var(--yellow)", color: "var(--ink)" }}><Heart size={20} /></span>
-                <span>Con Maura Abarcia<small>Emprendedora digital</small></span>
-              </div>
-            </Tilt>
-          </div>
-        </div>
-      </section>
-
-      {/* STEPS */}
-      <section className="steps" id="como">
-        <div className="wrap steps-grid">
-          <div data-reveal="left">
-            <span className="eyebrow">¿Y cómo se empieza?</span>
-            <h2 className="section-title">Tres pasos para dar el <span className="hl p">primer paso</span></h2>
-            <p className="lead">En la masterclass recorreremos juntas el camino para convertir tus conocimientos en una oportunidad real.</p>
-            <div className="step-list">
-              <div className="step-line"><i style={{ height: `${(step / (STEPS.length - 1)) * 100}%` }} /></div>
-              {STEPS.map((s, i) => (
-                <button key={i} className={`step ${step === i ? "on" : ""}`} onClick={() => setStep(i)} onPointerEnter={(e) => e.pointerType === "mouse" && setStep(i)}>
-                  <span className="step-ico"><s.icon size={22} /></span>
-                  <span>
-                    <h3>{s.title}</h3>
-                    <p>{s.text}</p>
-                  </span>
-                </button>
-              ))}
-            </div>
-            <span className="closing-line" data-reveal="zoom">Todo comienza con lo que ya sabes.</span>
-          </div>
-          <div className="photo-col" data-reveal="right">
-            <Tilt max={8}>
-              <div className="photo"><img src={slide6} alt="¿Y cómo se empieza? Descubriendo, comunicando y vendiendo" loading="lazy" /></div>
             </Tilt>
           </div>
         </div>
@@ -370,6 +316,15 @@ const App = () => {
               <h3>Libro digital imprimible</h3>
               <p>Material de trabajo para usar durante la sesión y aterrizar lo aprendido en tu propio proyecto.</p>
             </div>
+
+            <div className="dcard bonus span-12" onPointerMove={onCardGlow} data-reveal>
+              <span className="ico" style={{ background: "var(--yellow)", color: "var(--ink)" }}><Gift size={26} /></span>
+              <div>
+                <span className="bonus-tag">Bonus exclusivo</span>
+                <h3>Sesión de Claridad 1:1 con Maura (30 minutos)</h3>
+                <p>Un espacio personalizado donde revisaremos tu idea de negocio o emprendimiento actual, identificaremos oportunidades y definiremos cuál podría ser tu próximo paso para avanzar con claridad.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -379,8 +334,8 @@ const App = () => {
         <div className="wrap">
           <div style={{ textAlign: "center", maxWidth: 700, margin: "0 auto" }} data-reveal>
             <span className="eyebrow">Inscripción</span>
-            <h2 className="section-title">Completa el formulario y <span className="hl y">reserva tu lugar</span></h2>
-            <p className="lead">Déjanos tus datos y te escribiremos para confirmar tu inscripción en «Tu negocio desde casa».</p>
+            <h2 className="section-title">Completa el formulario y verás en pantalla el <span className="hl y">LINK DE PAGO</span></h2>
+            <p className="lead">para confirmar tu inscripción en «Tu negocio desde casa».</p>
           </div>
           <div className="form-shell glass" data-reveal="zoom">
             <div className="form-head">
