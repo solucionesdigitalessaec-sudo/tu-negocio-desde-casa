@@ -1,36 +1,24 @@
-import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import {
   ArrowRight,
   BookOpen,
   CalendarDays,
   CalendarPlus,
-  Check,
-  ChevronLeft,
-  ChevronRight,
   Clock,
   Heart,
   Instagram,
   Lightbulb,
   MessageCircle,
-  MousePointerClick,
-  Pause,
-  Play,
   Plus,
   ShoppingCart,
   Sparkles,
   Users,
   Video,
-  X,
 } from "lucide-react";
 import "./masterclass.css";
 
 import slide1 from "./assets/slide-1.webp";
-import slide2 from "./assets/slide-2.webp";
-import slide3 from "./assets/slide-3.webp";
-import slide4 from "./assets/slide-4.webp";
-import slide5 from "./assets/slide-5.webp";
 import slide6 from "./assets/slide-6.webp";
-import slide7 from "./assets/slide-7.webp";
 import slide8 from "./assets/slide-8.webp";
 import slide9 from "./assets/slide-9.webp";
 
@@ -46,18 +34,6 @@ const CALENDAR_URL =
   "&dates=20261122T200000Z/20261122T220000Z" +
   "&details=" + encodeURIComponent("Masterclass online de Homeschool Cristiano Chile junto a Maura Abarcia. Duración: 120 minutos.");
 
-const SLIDES = [
-  { src: slide1, title: "¿Y si la idea de negocio que tanto buscas… ya está en tus manos?", text: "Y todavía no te has dado cuenta." },
-  { src: slide2, title: "Piénsalo un momento…", text: "Llevas años aprendiendo, desarrollando habilidades, criando a tus hijos y ayudando a otros. Has aprendido mucho más de lo que imaginas." },
-  { src: slide3, title: "¿Y si eso que haces tan bien también pudiera generar ingresos?", text: "Hay algo que quizás nunca te has preguntado." },
-  { src: slide4, title: "No necesitas miles de seguidores", text: "Ni convertirte en influencer para comenzar. Necesitas descubrir qué puedes ofrecer y a quién puedes ayudar." },
-  { src: slide5, title: "Imagina transformar lo que sabes en algo que ayude a otras personas", text: "Y que, al mismo tiempo, pueda convertirse en tu propio negocio desde casa." },
-  { src: slide6, title: "¿Y cómo se empieza?", text: "Descubriendo una oportunidad de negocio, aprendiendo a comunicar tu valor y utilizando las redes sociales estratégicamente para vender." },
-  { src: slide7, title: "22 de noviembre: Tu negocio desde casa", text: "Un espacio para descubrir cómo dar tus primeros pasos en el emprendimiento digital." },
-  { src: slide8, title: "Junto a Maura Abarcia", text: "Emprendedora digital con 8 años de experiencia construyendo y monetizando su marca personal." },
-  { src: slide9, title: "Mamá, lo que sabes podría ser el comienzo de algo mucho más grande.", text: "Reserva tu lugar en «Tu negocio desde casa»." },
-];
-
 const STEPS = [
   { icon: Lightbulb, title: "Descubriendo una oportunidad de negocio", text: "Mirando con nuevos ojos lo que ya sabes hacer: tus conocimientos, tu experiencia como mamá y las habilidades que has desarrollado por años." },
   { icon: MessageCircle, title: "Aprendiendo a comunicar tu valor", text: "Poniendo en palabras qué puedes ofrecer y a quién puedes ayudar, para que otras personas lo entiendan y lo valoren." },
@@ -71,8 +47,6 @@ const FAQS = [
   { q: "¿Necesito tener seguidores o experiencia en redes?", a: "No. No necesitas miles de seguidores ni convertirte en influencer para comenzar. Necesitas descubrir qué puedes ofrecer y a quién puedes ayudar." },
   { q: "¿Cuánto cuesta y cómo reservo?", a: "El valor es $10.000 CLP o 10 USD. Completa el formulario de inscripción en esta página y te escribiremos para reservar tu lugar." },
 ];
-
-const MARQUEE = ["Tu negocio desde casa", "Emprendimiento digital", "Comunica tu valor", "Redes sociales con estrategia", "Todo comienza con lo que ya sabes", "22 de noviembre"];
 
 /* ---------------- hooks ---------------- */
 
@@ -103,9 +77,6 @@ const getRemaining = () => {
     s: Math.floor(diff / 1000) % 60,
   };
 };
-
-const prefersReducedMotion = () =>
-  typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 /* ---------------- small components ---------------- */
 
@@ -195,15 +166,8 @@ const App = () => {
   const [scrolled, setScrolled] = useState(false);
   const [showSticky, setShowSticky] = useState(false);
 
-  const [slide, setSlide] = useState(0);
-  const [paused, setPaused] = useState(prefersReducedMotion);
-  const [hovering, setHovering] = useState(false);
-  const [lightbox, setLightbox] = useState<number | null>(null);
-  const dragX = useRef<number | null>(null);
 
-  const [flipped, setFlipped] = useState<number | null>(null);
   const [step, setStep] = useState(0);
-  const [usd, setUsd] = useState(false);
   const [faq, setFaq] = useState<number | null>(0);
   const [formLoaded, setFormLoaded] = useState(false);
 
@@ -229,21 +193,6 @@ const App = () => {
     return () => { window.removeEventListener("scroll", onScroll); cancelAnimationFrame(raf); };
   }, []);
 
-  const go = useCallback((i: number) => setSlide((i + SLIDES.length) % SLIDES.length), []);
-
-  // keyboard for lightbox
-  useEffect(() => {
-    if (lightbox === null) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightbox(null);
-      if (e.key === "ArrowRight") setLightbox((i) => (i === null ? i : (i + 1) % SLIDES.length));
-      if (e.key === "ArrowLeft") setLightbox((i) => (i === null ? i : (i - 1 + SLIDES.length) % SLIDES.length));
-    };
-    window.addEventListener("keydown", onKey);
-    document.body.style.overflow = "hidden";
-    return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
-  }, [lightbox]);
-
   const onHeroMove = (e: ReactPointerEvent<HTMLElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
@@ -262,15 +211,6 @@ const App = () => {
   const coveredTz = ["America/Santiago", "America/Mexico_City", "America/Bogota", "America/Guayaquil"];
   const showLocal = !coveredTz.includes(localTz);
 
-  const stackStyle = (i: number): React.CSSProperties => {
-    const offset = (i - slide + SLIDES.length) % SLIDES.length;
-    if (offset === 0) return { transform: "none", zIndex: 10, opacity: 1 };
-    if (offset === 1) return { transform: "translate(26px, 14px) rotate(5deg) scale(0.95)", zIndex: 9, opacity: 1, filter: "brightness(0.96)" };
-    if (offset === 2) return { transform: "translate(48px, 26px) rotate(9deg) scale(0.9)", zIndex: 8, opacity: 0.85, filter: "brightness(0.92)" };
-    if (offset === SLIDES.length - 1) return { transform: "translate(-120%, 20px) rotate(-14deg)", zIndex: 11, opacity: 0, pointerEvents: "none" };
-    return { transform: "translate(48px, 26px) rotate(9deg) scale(0.88)", zIndex: 1, opacity: 0, pointerEvents: "none" };
-  };
-
   return (
     <div className="mc" ref={rootRef}>
       <div className="progress" aria-hidden="true" />
@@ -282,7 +222,6 @@ const App = () => {
           <span>Homeschool<br />Cristiano Chile</span>
         </a>
         <div className="nav-links">
-          <a href="#historia">Historia</a>
           <a href="#como">Qué aprenderás</a>
           <a href="#mentora">Mentora</a>
           <a href="#detalles">Detalles</a>
@@ -313,11 +252,6 @@ const App = () => {
             <div data-reveal style={{ "--d": "0.4s" } as React.CSSProperties}>
               <Countdown />
             </div>
-            <div className="hero-mini" data-reveal style={{ "--d": "0.5s", marginTop: 20 } as React.CSSProperties}>
-              <span><Clock size={16} /> 120 minutos en vivo</span>
-              <span><Video size={16} /> Grabación por 1 semana</span>
-              <span><BookOpen size={16} /> Libro digital imprimible</span>
-            </div>
           </div>
 
           <div className="hero-visual" data-reveal="zoom" style={{ "--d": "0.2s" } as React.CSSProperties}>
@@ -336,139 +270,6 @@ const App = () => {
                 <span>Con Maura Abarcia<small>Emprendedora digital</small></span>
               </div>
             </Tilt>
-          </div>
-        </div>
-      </section>
-
-      {/* MARQUEE */}
-      <div className="marquee" aria-hidden="true">
-        <div className="marquee-track">
-          {[...MARQUEE, ...MARQUEE].map((m, i) => (
-            <span key={i}>{m} <i>✦</i></span>
-          ))}
-        </div>
-      </div>
-
-      {/* STORY CAROUSEL */}
-      <section className="story" id="historia">
-        <div className="wrap story-grid">
-          <div data-reveal="left">
-            <span className="eyebrow">Desliza la historia</span>
-            <h2 className="section-title">Una pregunta que puede <span className="hl y">cambiarlo todo</span></h2>
-            <div className="story-caption" aria-live="polite">
-              <span className="num">{String(slide + 1).padStart(2, "0")} / {String(SLIDES.length).padStart(2, "0")}</span>
-              <h3 key={`t${slide}`}>{SLIDES[slide].title}</h3>
-              <p key={`p${slide}`} className="lead">{SLIDES[slide].text}</p>
-            </div>
-            <div className="story-nav">
-              <button className="round-btn" onClick={() => go(slide - 1)} aria-label="Anterior"><ChevronLeft /></button>
-              <button className="round-btn" onClick={() => setPaused((p) => !p)} aria-label={paused ? "Reproducir" : "Pausar"}>
-                {paused ? <Play size={20} /> : <Pause size={20} />}
-              </button>
-              <button className="round-btn" onClick={() => go(slide + 1)} aria-label="Siguiente"><ChevronRight /></button>
-            </div>
-            <div className="thumbs">
-              {SLIDES.map((s, i) => (
-                <button key={i} className={i === slide ? "on" : ""} onClick={() => go(i)} aria-label={`Ver imagen ${i + 1}`}>
-                  <img src={s.src} alt="" loading="lazy" />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div data-reveal="right">
-            <div
-              className={`story-stage ${paused || hovering ? "paused" : ""}`}
-              style={{ "--dur": "6s" } as React.CSSProperties}
-              onPointerEnter={(e) => e.pointerType === "mouse" && setHovering(true)}
-              onPointerLeave={() => setHovering(false)}
-              onPointerDown={(e) => { dragX.current = e.clientX; }}
-              onPointerUp={(e) => {
-                if (dragX.current === null) return;
-                const dx = e.clientX - dragX.current;
-                dragX.current = null;
-                if (Math.abs(dx) > 40) go(slide + (dx < 0 ? 1 : -1));
-                else setLightbox(slide);
-              }}
-              onPointerCancel={() => { dragX.current = null; }}
-            >
-              <div className="story-bars">
-                {SLIDES.map((_, i) => (
-                  <button
-                    key={i}
-                    className={i < slide ? "done" : i === slide ? "current" : ""}
-                    onPointerDown={(e) => e.stopPropagation()}
-                    onPointerUp={(e) => e.stopPropagation()}
-                    onClick={() => go(i)}
-                    aria-label={`Ir a la imagen ${i + 1}`}
-                  >
-                    <i key={i === slide ? `on-${slide}` : i} onAnimationEnd={() => i === slide && go(slide + 1)} />
-                  </button>
-                ))}
-              </div>
-              {SLIDES.map((s, i) => (
-                <div className="story-card" key={i} style={stackStyle(i)} aria-hidden={i !== slide}>
-                  <img src={s.src} alt={s.title} loading={i < 2 ? "eager" : "lazy"} draggable={false} />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* THINK */}
-      <section className="think">
-        <div className="wrap">
-          <div className="think-grid">
-            <div data-reveal="left">
-              <Tilt max={8}>
-                <div className="photo"><img src={slide2} alt="Mamá acompañando a su hija en sus tareas" loading="lazy" /></div>
-              </Tilt>
-            </div>
-            <div data-reveal="right">
-              <span className="eyebrow">Piénsalo un momento…</span>
-              <h2 className="section-title">Has aprendido <span className="hl">mucho más</span> de lo que imaginas.</h2>
-              <p className="lead">
-                Llevas años aprendiendo, desarrollando habilidades, criando a tus hijos y ayudando a otros.
-                Todo eso que haces cada día tiene un valor enorme.
-              </p>
-              <div className="quote-card glass">
-                <span className="hand">“</span>
-                <p className="lead" style={{ color: "var(--ink)", fontWeight: 700 }}>
-                  Imagina transformar lo que sabes en algo que ayude a otras personas… y que, al mismo tiempo,
-                  pueda convertirse en <span className="underline">tu propio negocio desde casa</span>.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="flip-grid">
-            {[
-              { q: "¿Y si eso que haces tan bien pudiera generar ingresos?", a: "Hay algo que quizás nunca te has preguntado: tus conocimientos y tu experiencia pueden ser el punto de partida de tu emprendimiento.", icon: Lightbulb, c: "c1", bg: "var(--yellow-soft)", col: "#d68a00" },
-              { q: "¿Necesito miles de seguidores?", a: "No, mamá. No necesitas miles de seguidores ni convertirte en influencer para comenzar. Necesitas descubrir qué puedes ofrecer y a quién puedes ayudar.", icon: Users, c: "c2", bg: "var(--lavender)", col: "var(--purple)" },
-              { q: "¿Puedo hacerlo desde casa?", a: "Sí. Se trata de dar tus primeros pasos en el emprendimiento digital, a tu ritmo, acompañando a tu familia.", icon: Heart, c: "c3", bg: "var(--pink-soft)", col: "var(--pink)" },
-            ].map((f, i) => (
-              <button
-                key={i}
-                className={`flip ${flipped === i ? "on" : ""}`}
-                onClick={() => setFlipped(flipped === i ? null : i)}
-                data-reveal
-                style={{ "--d": `${i * 0.12}s` } as React.CSSProperties}
-                aria-pressed={flipped === i}
-              >
-                <div className="flip-inner">
-                  <div className="flip-face flip-front">
-                    <span className="flip-icon" style={{ background: f.bg, color: f.col }}><f.icon size={26} /></span>
-                    <h3>{f.q}</h3>
-                    <span className="hint"><MousePointerClick size={15} /> Toca para descubrir</span>
-                  </div>
-                  <div className={`flip-face flip-back ${f.c}`}>
-                    <Sparkles size={26} />
-                    <p>{f.a}</p>
-                  </div>
-                </div>
-              </button>
-            ))}
           </div>
         </div>
       </section>
@@ -582,38 +383,6 @@ const App = () => {
         </div>
       </section>
 
-      {/* PRICING */}
-      <section className="pricing" id="valor">
-        <div className="wrap">
-          <div className="price-card glass" data-reveal="zoom">
-            <span className="eyebrow">Inversión</span>
-            <h2 className="section-title" style={{ marginBottom: 0 }}>Reserva tu lugar</h2>
-            <div className={`toggle ${usd ? "usd" : ""}`} role="group" aria-label="Moneda">
-              <span className="knob" />
-              <button className={!usd ? "on" : ""} onClick={() => setUsd(false)} aria-pressed={!usd}>CLP</button>
-              <button className={usd ? "on" : ""} onClick={() => setUsd(true)} aria-pressed={usd}>USD</button>
-            </div>
-            <div className="price">
-              <span className="price-swap" key={usd ? "usd" : "clp"}>
-                {usd ? "$10" : "$10.000"}<span className="cur">{usd ? "USD" : "CLP"}</span>
-              </span>
-            </div>
-            <p className="lead" style={{ fontSize: "1rem" }}>Pago único · Masterclass online</p>
-            <ul className="incl">
-              {[
-                "Masterclass en vivo de 120 minutos",
-                "Acceso a la grabación online por una semana",
-                "Libro digital imprimible para trabajar en la sesión",
-                "Junto a Maura Abarcia, emprendedora digital",
-              ].map((t) => (
-                <li key={t}><span className="ck"><Check size={16} strokeWidth={3} /></span>{t}</li>
-              ))}
-            </ul>
-            <a href="#inscripcion" className="btn pulse">Quiero inscribirme <ArrowRight size={20} /></a>
-          </div>
-        </div>
-      </section>
-
       {/* SIGNUP FORM */}
       <section className="signup" id="inscripcion">
         <div className="wrap">
@@ -696,15 +465,6 @@ const App = () => {
         <a href="#inscripcion" className="btn small">Reservar</a>
       </div>
 
-      {/* LIGHTBOX */}
-      {lightbox !== null && (
-        <div className="lightbox" role="dialog" aria-modal="true" aria-label="Imagen ampliada" onClick={() => setLightbox(null)}>
-          <img src={SLIDES[lightbox].src} alt={SLIDES[lightbox].title} key={lightbox} onClick={(e) => e.stopPropagation()} />
-          <button className="round-btn lb-close" onClick={() => setLightbox(null)} aria-label="Cerrar"><X /></button>
-          <button className="round-btn lb-prev" onClick={(e) => { e.stopPropagation(); setLightbox((lightbox - 1 + SLIDES.length) % SLIDES.length); }} aria-label="Anterior"><ChevronLeft /></button>
-          <button className="round-btn lb-next" onClick={(e) => { e.stopPropagation(); setLightbox((lightbox + 1) % SLIDES.length); }} aria-label="Siguiente"><ChevronRight /></button>
-        </div>
-      )}
     </div>
   );
 };
