@@ -11,11 +11,12 @@ import {
   MessageCircle,
   ShoppingCart,
   Sparkles,
-  Users,
   Video,
 } from "lucide-react";
 import "./masterclass.css";
 
+import logo from "./assets/logo.webp";
+import logoFull from "./assets/logo-full.webp";
 import slide1 from "./assets/slide-1.webp";
 import slide6 from "./assets/slide-6.webp";
 import slide8 from "./assets/slide-8.webp";
@@ -209,7 +210,7 @@ const App = () => {
       {/* NAV */}
       <nav className={`nav ${scrolled ? "scrolled" : ""}`} aria-label="Principal">
         <a href="#top" className="brand">
-          <span className="brand-logo"><Users size={20} /></span>
+          <img className="brand-logo" src={logo} alt="" width={44} height={44} />
           <span>Homeschool<br />Cristiano Chile</span>
         </a>
         <div className="nav-links">
@@ -425,6 +426,7 @@ const App = () => {
       </section>
 
       <footer>
+        <img className="footer-logo" src={logoFull} alt="Homeschool Cristiano Chile" width={120} height={123} loading="lazy" />
         © 2026 Homeschool Cristiano Chile · Masterclass «Tu negocio desde casa»
       </footer>
 
