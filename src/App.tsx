@@ -243,7 +243,7 @@ const App = () => {
 
           <div className="hero-visual" data-reveal="zoom" style={{ "--d": "0.2s" } as React.CSSProperties}>
             <Tilt max={12}>
-              <div className="photo"><img src={slide1} alt="Mamá pensando en su idea de negocio" width={900} height={1125} fetchPriority="high" /></div>
+              <div className="photo"><img src={slide1} alt="Imagina transformar lo que sabes en algo que ayude a otras personas, y que al mismo tiempo pueda convertirse en tu propio negocio desde casa" width={900} height={1125} fetchPriority="high" /></div>
             </Tilt>
           </div>
         </div>
@@ -260,8 +260,11 @@ const App = () => {
               <span className="eyebrow">Junto a</span>
               <h2>Maura <span className="hl">Abarcia</span></h2>
               <p className="lead">
-                Emprendedora digital con <b>8 años de experiencia</b> construyendo y monetizando su marca personal.
-                En esta masterclass aprenderás cómo convertir tus conocimientos en una oportunidad de negocio.
+                Descubrirás cómo puedes utilizar tu emprendimiento como una oportunidad de servir a otros al poner a{" "}
+                <b>Dios como el centro de tu negocio</b>.
+              </p>
+              <p className="lead">
+                Aprenderás a monetizar tus conocimientos, desarrollar tu marca y a comunicar de manera efectiva en redes sociales.
               </p>
               <div className="stat-row">
                 <div className="stat"><b>8 años</b><span>emprendiendo en digital</span></div>
