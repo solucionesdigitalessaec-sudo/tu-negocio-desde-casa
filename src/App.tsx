@@ -23,7 +23,7 @@ const FORM_EMBED_URL = `${FORM_URL}?embedded=true`;
 // Mercado Pago payment link. After the embedded form is submitted a thank-you panel replaces
 // Google's confirmation and, when this is set, its button opens the payment in a new tab
 // (Mercado Pago refuses to load inside an iframe).
-const PAYMENT_URL = "";
+const PAYMENT_URL = "https://mpago.la/1nCbrAS";
 // 22 nov 2026, 17:00 Chile (UTC-3) = 20:00 UTC
 const EVENT_START = new Date("2026-11-22T20:00:00Z");
 const EVENT_END = new Date("2026-11-22T22:00:00Z");
